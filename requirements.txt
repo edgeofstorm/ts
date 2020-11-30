@@ -1,0 +1,17 @@
+asgiref==3.3.1
+click==7.1.2
+Django==3.1.3
+django-crispy-forms==1.10.0
+joblib==0.17.0
+JPype1==1.1.2
+numpy==1.19.4
+pytz==2020.4
+regex==2020.11.11
+scikit-learn==0.23.2
+scipy==1.5.4
+sklearn==0.0
+sqlparse==0.4.1
+threadpoolctl==2.1.0
+tqdm==4.51.0
+typing-extensions==3.7.4.3
+matplotlib==3.2.0

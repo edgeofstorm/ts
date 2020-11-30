@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load custom_tags %}
+
+
+{% block content %}
+
+    <div class="container-fluid mt-5">
+        <div class="row">
+            <div class="col-2">
+            </div>
+            <div class="col-8">
+                <h1>Ozet Ekle</h1>
+                <form action="." method="post" id="form" onsubmit="return validateForm()">
+                    {% csrf_token %}
+                    
+                    {{ form.document|as_crispy_field }}
+                    <button type="button" id="btn">metni sec</button>
+
+                        <div class="form-group">
+                        <label name="labeltoken" id="labelid" for="disabledTextInput"></label>
+                        <h3 name="count" id="count"></h3>
+                        <h2 id="currcount"></h2>
+                        <div id="someId"></div>
+                        <p name="token" id="disabledTextInput"></p>
+                        </div>
+
+                    <input type="submit" id="sub" value="Ozet ekle">
+
+                </form>
+            </div>
+            <div class="col-2"></div>
+        </div>
+    </div>
+    
+<script  type="text/javascript">
+
+document.getElementById('btn').onclick = function() {
+    document.getElementById('someId').innerHTML='';
+    document.getElementById('currcount').innerHTML='';
+    var sel = document.getElementById('id_document');
+    var text = "doc"
+    var index = sel.selectedIndex
+    if(index==''){
+        index=1
+        console.log(empty)
+    }
+    {% for doc in docs %}
+    if(index == '{{ forloop.counter }}'){
+        var text = '{{doc.tokenized }}'
+    }
+    {% endfor %}
+    console.log(text)
+    text = text.replaceAll("&#x27;","'")
+    text = text.replaceAll("&quot;",'"')
+    text = text.replaceAll(', "','\n')
+    text = text.replaceAll("', '","\n")
+    text = text.replaceAll("['","")
+    text = text.replaceAll("']","")
+    //document.getElementById('disabledTextInput').innerText= text.replaceAll("&#x27;","'")
+    text = text.replaceAll("&#x27;","'")
+    text = text.replaceAll("~","\n")
+    text = text.substring(0, text.length - 1);
+    console.log(text)
+    var textarr = text.split("\n")
+    var someDiv = document.getElementById('someId');
+    for(var i=0;i<textarr.length;i++){
+        var checkBox = document.createElement("input");
+        checkBox.type = "checkbox";
+        checkBox.onchange= function(){document.getElementById('currcount').innerText = 'suan ' +  document.querySelectorAll('input[type="checkbox"]:checked').length + ' tane sectin'}
+        //checkBox.setAttribute("onchange", function(){document.getElementById('currcount').innerText = document.querySelectorAll('input[type="checkbox"]:checked').length});
+        checkBox.name = 'selected';//textarr[i];
+        checkBox.value = i;//textarr[i];
+        checkBox.id = textarr[i];
+        //checkBox.onclick = "return false;"
+
+        var label = document.createElement("label");
+        label.htmlFor = textarr[i];
+        var newline = document.createElement("br");
+        var newlin = document.createElement("br");
+        var newli = document.createElement("br");
+
+        someDiv.appendChild(checkBox);
+        someDiv.appendChild(label);
+        someDiv.appendChild(newline);
+        someDiv.appendChild(newlin);
+        label.appendChild(document.createTextNode(textarr[i]));
+        }
+
+
+    document.getElementById('labelid').innerText= index.toString() + ".Metin"
+    var des = Math.round(((text.split("\n").length) * 0.25))
+    if(des < 4){
+        des = 4
+    }
+    document.getElementById('count').innerText= des + " Cumle Sec"
+}
+
+function checkboxes(){
+    console.log('jkndgjknsdj')
+    var len = document.querySelectorAll('input[type="checkbox"]:checked').length
+    document.getElementById('currcount').innerText = len
+    }
+
+}
+
+</script>
+
+{% endblock content %}

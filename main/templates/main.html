@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block content %}
+
+<div class="container-fluid mt-5">
+    <div class="row">
+        <!-- style="display: flex;" -->
+        <div class="col-2">
+            <div class="container mt-5">
+                <div class="row">
+                    <!-- bg-dark -->
+                    <a class="btn btn-primary my-auto" href="{% url 'parameters' %}">Tune parameters</a>
+                </div>
+                <div class="row mt-5">
+                    <a class="btn btn-primary my-auto" href="{% url 'contribute:contribute' %}">Add Summary</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-8">
+
+            <form action="." method="post" id="form">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="exampleFormControlInput1">Title (If present)</label>
+                    <input type="text" name="title" class="form-control" id="exampleFormControlInput1"
+                        value={% if input %}"{{title}}"{% else %}"Metin ve Paragraf"{% endif %}></input>
+                </div>
+
+                <div class="form-group">
+                    <label for="exampleFormControlTextarea1">Input</label>
+                    <textarea class="form-control" name="input" id="exampleFormControlTextarea1" rows="10" required>{% if input %}{{input}}{% else %}    Bir yazıyı şekil, anlatım ve noktalama özellikleriyle oluşturan kelimelerin bütününe metin adı verilir. Diğer bir ifadeyle metin, iletişim kurmak için oluşturulan cümleler topluluğudur. Sözlü ya da yazılı iletişim için üretilen anlamlı yapıdır. Yazar, iletmek istediği mesajı metin aracılığıyla ifade eder.
+
+    Bir metin, aralarında anlam, anlatım bakımından ilişki ve bütünlük bulunan paragraflardan oluşur. İyi kurgulanmış bir metinde, her paragraf bir düşünce birimidir. Metindeki paragraf sayısı, o metnin içerdiği düşünce sayısını verir. Bunun nedeniyse her düşüncenin bir paragrafta tam olarak ortaya konmasıdır. Sözcükler seslerden, cümleler sözcüklerden, paragraflar ise cümlelerden oluşur.
+
+    Metni oluşturan en büyük yapı paragraftır. Düzyazılarda genellikle satır başlarıyla birbirlerinden ayrılan bölümlerin her birine paragraf adı verilir. Paragrafın oluşumu konuyla doğrudan ilgilidir. Çünkü yazar, duygu ve düşüncelerini bir olay ve olgudan hareketle anlatır. Ele aldığı konuyu, amacına göre sınırlayıp birbiriyle ilintili paragraflar hâlinde verir. Bu, metin oluşturulurken uyulması gereken en önemli kurallardan biridir.
+
+    Metindeki paragraflar, bir zincir şeklinde anlam, dil ve anlatım bakımından birbirini tamamlayan, destekleyen bir bütündür. Bu yapı özelliği sayesinde metinde anlamla yapı yönüyle bir bütünlük ve uyum ortaya çıkar. Bu bütünlüğün sağlanabilmesi adına metindeki paragrafların dil ve anlatım yönüyle birbirine bağlanması büyük bir önem taşır.
+
+    Bir yapboz oluşturmak için parçaların birbirine bağlanmasına gereksinim duyulması gibi bir metin oluşturmak için de paragrafların birbirine bağlanması gerekir. Bir görüşün, bir duygunun işlendiği metinlerde de işlenen görüş ve duyguların birbirini destekleyecek paragraflar şeklinde, mantıksal bir sıra ile ele alınması gerekir. Örnek olarak olayın işlendiği metinlerde paragrafların zaman, kişi, çevre gibi öğelerin sırasına dikkat edilmesi gerekir. Buna dikkat edilmezse paragraflar arasında zaman, kişi, mekân vb. yönlerden karışıklıklar ortaya çıkar, metnin anlaşılması güçleşir.
+
+    Bir metnin anlatım biçimi ve dil özelliklerinin temelinde metnin türü, içeriği, anlatımın amacı, okur kitlesinin düzeyi, özellikleri bulunur. Yazar, iletisini tam olarak verebilmek için metin yazarken bütün bunlara dikkat etmelidir. Bu amaca ulaşmak isteyen yazar, bir düşüncesini aktarırken ya da bir olayı okurun gözü önünde canlanacak şekilde anlatırken metne uygun olan anlatım tekniklerinden yararlanmalıdır. Örneğin hikâye ve roman yazarken olay (öyküleme), betimleme paragraflarından; düşünce yazılarında örneklendirme, tanık gösterme, tanımlama, karşılaştırma gibi anlatım yöntemlerinden yararlanmalıdır
+    {% endif %}</textarea>
+                </div>
+
+                <label for="customRange3">Compression Rate</label>
+                <br />
+
+                <div class="d-flex justify-content-between">
+                    <label for="customRange3" class="float">%0</label>
+                    <label for="customRange3" class="float">%25</label>
+                    <label for="customRange3" class="float">%50</label>
+                    <label for="customRange3" class="float">%75</label>
+                    <label for="customRange3" class="float">%100</label>
+                </div>
+                <input type="range" class="custom-range" name="compression" min="0.0" max="1.0" step="0.25"
+                    list="tickmarks" id="customRange3" />
+                <datalist id="tickmarks">
+                    <option value="1" label="0%"></option>
+                    <option value="0.75" label="25%"></option>
+                    <option value="0.5" label="50%"></option>
+                    <option value="0.25" label="75%"></option>
+                    <option value="0.1" label="100%"></option>
+                </datalist>
+                <br>
+
+                <button type="submit" class="btn btn-primary mt-3">Summarize</button>
+
+                {% if summary %}
+                <div class="form-group mt-1">
+                    {% if compression %}
+                    <label for="exampleFormControlTextarea1">Summary (%{{compression}} compression)</label>{% endif %}
+                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="10">{{summary}}</textarea>
+                </div>
+                {% endif %}
+            </form>
+
+
+        </div>
+        <div class="col-2"></div>
+    </div>
+</div>
+
+<script>
+    var x = document.getElementById("customRange3");
+    x.defaultValue = 0.75;
+
+    function updateTextInput(val) {
+        document.getElementById('textInput').value = val;
+    }
+</script>
+
+{% endblock content %}
